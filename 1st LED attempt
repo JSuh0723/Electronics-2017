@@ -1,0 +1,95 @@
+
+#include <Adafruit_NeoPixel.h>
+#include "WS2812_Definitions.h"
+
+#define PIN 4
+#define LED_COUNT 11
+int ledc = 11;
+Adafruit_NeoPixel leds = Adafruit_NeoPixel(LED_COUNT, PIN, NEO_GRB + NEO_KHZ800);
+
+void setup() {
+  leds.begin();  // Call this to start up the LED strip.
+  clearLEDs();   // This function, defined below, turns all LEDs off...
+  leds.show();   // ...but the LEDs don't actually update until you call this.
+}
+
+void loop() {
+  /*byte red = (PALETURQUOISE & 0xFF0000) >> 16;
+  byte green = (PALETURQUOISE & 0x00FF00) >> 8;
+  byte blue = (PALETURQUOISE & 0x0000FF);*/
+   for (int i=0; i<6; i++)
+  {
+   
+   //clearLEDs();
+   leds.setPixelColor(i, DARKGREEN);
+   leds.show();
+  }
+  for (int i=7; i<12; i++)
+  {
+   
+   //clearLEDs();
+   leds.setPixelColor(i, CYAN);
+   leds.show();
+  }
+  
+  /* for (int i=0; i<10; i++)
+  {
+    // cylon function: first param is color, second is time (in ms) between cycles
+    cylon(FIREBRICK, 500);  // Indigo cylon eye!
+  }
+  */
+
+}
+
+void cylon(unsigned long color, byte wait)
+{
+  // weight determines how much lighter the outer "eye" colors are
+  const byte weight = 4;  
+  // It'll be easier to decrement each of these colors individually
+  // so we'll split them out of the 24-bit color value
+  byte red = (color & 0xFF0000) >> 16;
+  byte green = (color & 0x00FF00) >> 8;
+  byte blue = (color & 0x0000FF);
+  
+  // Start at closest LED, and move to the outside
+  for (int i=0; i<=LED_COUNT-1; i++)
+  {
+    clearLEDs();
+    leds.setPixelColor(i, red, green, blue);  // Set the bright middle eye
+    // Now set two eyes to each side to get progressively dimmer
+    for (int j=1; j<7; j++)
+    {
+      if (i-j >= 0)
+        leds.setPixelColor(i-j, red/(weight*j), green/(weight*j), blue/(weight*j));
+      if (i-j <= LED_COUNT)
+        leds.setPixelColor(i+j, red/(weight*j), green/(weight*j), blue/(weight*j));
+    }
+    leds.show();  // Turn the LEDs on
+    delay(wait);  // Delay for visibility
+  }
+  
+  // Now we go back to where we came. Do the same thing.
+  for (int i=LED_COUNT-2; i>=1; i--)
+  {
+    clearLEDs();
+    leds.setPixelColor(i, red, green, blue);
+    for (int j=1; j<7; j++)
+    {
+      if (i-j >= 0)
+        leds.setPixelColor(i-j, red/(weight*j), green/(weight*j), blue/(weight*j));
+      if (i-j <= LED_COUNT)
+        leds.setPixelColor(i+j, red/(weight*j), green/(weight*j), blue/(weight*j));
+      }
+    
+    leds.show();
+    delay(wait);
+  }
+}
+
+void clearLEDs()
+{
+  for (int i=0; i<LED_COUNT; i++)
+  {
+    leds.setPixelColor(i, 0);
+  }
+}
