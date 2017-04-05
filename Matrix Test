@@ -1,0 +1,124 @@
+#include <Adafruit_GFX.h>
+#include <Adafruit_NeoMatrix.h>
+#include <Adafruit_NeoPixel.h>
+#include <Wire.h>
+#define PIN 6
+
+uint16_t mask [11];
+
+//WORDCLOCK COLORS
+  int wordred   = 80;
+  int wordblue  = 255;
+  int wordgreen = 160;
+
+  //DIGIT COLORS (HOURS)
+  int hourred   = 130;
+  int hourblue  = 130;
+  int hourgreen = 130;
+  //DIGIT COLORS (MINUTES)
+  int minred    = 250;
+  int minblue   = 250;
+  int mingreen  = 250;
+
+
+#define WORD_MODE 0
+#define DIGIT_MODE 1
+#define CHANGSUI_MODE 2
+#define MAX_MODE 3
+
+#define phraseITS        mask[0]  |= 0xE000
+#define phraseA          mask[0]  |= 0x800
+#define phraseFIVE       mask[2]  |= 0x1E0
+#define phraseTEN        mask[1]  |= 0x7000
+#define phraseQUARTER    mask[1]  |= 0xFE0
+#define phraseTWENTY     mask[2]  |= 0xFC00
+#define phraseHALF       mask[0]  |= 0x3C0
+#define phrasePAST       mask[3]  |= 0x3C0
+#define phraseTIL        mask[3]  |= 0x1C00
+#define hourONE          mask[9]  |= 0xE000
+#define hourTWO          mask[7]  |= 0xE0
+#define hourTHREE        mask[9]  |= 0x3E0
+#define hourFOUR         mask[10] |= 0xF000
+#define hourFIVE         mask[7]  |= 0xF000
+#define hourSIX          mask[9]  |= 0x1C00
+#define hourSEVEN        mask[4]  |= 0x7C00
+#define hourEIGHT        mask[8]  |= 0x3E0
+#define hourNINE         mask[7]  |= 0xF00
+#define hourTEN          mask[6]  |= 0xE0
+#define hourELEVEN       mask[8]  |= 0xFC00
+#define hourNOON         mask[4]  |= 0x1E0
+#define hourMIDNIGHT     mask[6]  |= 0xFF00
+#define phraseOCLOCK     mask[10] |= 0x7E0
+#define phraseHAPPY      mask[0]  |= 0x200, mask[1]  |= 0x200, mask[2]  |= 0x200, mask[3]  |= 0x200, mask[4]  |= 0x200
+#define phraseBIRTHDAY   mask[5]  |= 0x7DC0
+
+
+// define pins
+#define NEOPIN 6
+
+// define delays
+//#define FLASHDELAY 500  // delay for startup "flashWords" sequence
+//#define SHIFTDELAY 100   // controls color shifting speed
+
+// Parameter 1 = number of pixels in matrix
+// Parameter 2 = Arduino pin number (most are valid)
+// Parameter 3 = pixel type flags, add together as needed:
+//   NEO_KHZ800  800 KHz bitstream (most NeoPixel products w/WS2812 LEDs)
+//   NEO_KHZ400  400 KHz (classic 'v1' (not v2) FLORA pixels, WS2811 drivers)
+//   NEO_GRB     Pixels are wired for GRB bitstream (most NeoPixel products)
+//   NEO_RGB     Pixels are wired for RGB bitstream (v1 FLORA pixels, not v2)
+//Adafruit_NeoPixel matrix = Adafruit_NeoPixel(64, NEOPIN, NEO_GRB + NEO_KHZ800);
+
+// configure for 11x11 neopixel matrix
+Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(11, 11, NEOPIN,
+      NEO_MATRIX_TOP  + NEO_MATRIX_RIGHT +
+      NEO_MATRIX_ROWS + NEO_MATRIX_ZIGZAG,
+      NEO_RGB         + NEO_KHZ800);
+
+void rainbowCycle(uint8_t wait);
+void flashWords(void);
+void pickAPixel(uint8_t x, uint8_t y);
+
+void setup() {
+  matrix.begin();
+}
+
+void applyMask() {
+
+   for (byte row = 0; row < 11; row++) 
+   {
+      for (byte col = 0; col < 16; col++) 
+      {
+         boolean masker = bitRead(mask[row], 15 - col); // bitread is backwards because bitRead reads rightmost digits first. could have defined the word masks differently
+         switch (masker) 
+         {
+            case 0:
+               matrix.drawPixel(col, row, 0);
+               break;
+         }
+      }
+      // reset mask for next time
+      mask[row] = 0;
+   }
+
+
+   matrix.show(); // show it!
+}
+
+void displayWords() {
+  phraseITS;
+  //phraseHALF;
+  //phraseTEN;
+  //phraseQUARTER;
+  //phraseTWENTY;
+  //phraseFIVE;
+    applyMask();
+}
+
+
+
+
+
+
+
+
