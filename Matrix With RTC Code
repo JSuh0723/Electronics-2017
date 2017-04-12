@@ -75,6 +75,10 @@ void ITS(){
 void A() {
   matrix.drawPixel(5,0, matrix.Color(200,0,0));
 }
+void HI() {
+  matrix.drawPixel(6,0, matrix.Color(200,0,0));
+  matrix.drawPixel(7,0, matrix.Color(200,0,0));
+}
 void HALF() {
   matrix.drawPixel(7,0, matrix.Color(200,0,0));
   matrix.drawPixel(8,0, matrix.Color(200,0,0));
@@ -140,7 +144,7 @@ void CHANG() {
   matrix.drawPixel(4,5, matrix.Color(0,128,0));
   matrix.drawPixel(5,5, matrix.Color(0,128,0));
 }
-void SUI() {
+void SIU() {
   matrix.drawPixel(7,5, matrix.Color(0,128,0));
   matrix.drawPixel(8,5, matrix.Color(0,128,0));
   matrix.drawPixel(9,5, matrix.Color(0,128,0));
@@ -222,6 +226,10 @@ void OCLOCK() {
   matrix.drawPixel(8,10, matrix.Color(0,128,0));
   matrix.drawPixel(9,10, matrix.Color(0,128,0));
   matrix.drawPixel(10,10, matrix.Color(0,128,0));
+}
+void DR() {
+  matrix.drawPixel(7,2, matrix.Color(200,0,0));
+  matrix.drawPixel(7,3, matrix.Color(200,0,0));
 }
 
 void displayWords() {
@@ -558,6 +566,3 @@ void displayWords() {
   }
   matrix.show();
 }
-
-
-
